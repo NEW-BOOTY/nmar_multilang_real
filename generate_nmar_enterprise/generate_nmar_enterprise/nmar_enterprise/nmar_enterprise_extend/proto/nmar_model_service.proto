@@ -1,0 +1,24 @@
+/*
+Copyright © 2025 Devin B. Royal. All Rights Reserved.
+*/
+syntax = "proto3";
+
+package nmar.model;
+
+option java_package = "com.devin.nmar.grpc";
+option java_outer_classname = "NmarModelProto";
+
+message EmbeddingRequest {
+  string modality = 1;
+  repeated float input = 2;
+  string api_key = 3;
+}
+
+message EmbeddingResponse {
+  repeated float embedding = 1;
+  string message = 2;
+}
+
+service ModelService {
+  rpc GetEmbedding(EmbeddingRequest) returns (EmbeddingResponse);
+}

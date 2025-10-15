@@ -1,0 +1,26 @@
+# Copyright © 2025 Devin B. Royal. All Rights Reserved.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nmar-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nmar-core
+  template:
+    metadata:
+      labels:
+        app: nmar-core
+    spec:
+      containers:
+      - name: nmar-core
+        image: nmar-core:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+        env:
+        - name: MODEL_SERVER_URL
+          value: "http://nmar-model-server:8080"

@@ -1,0 +1,18 @@
+# Copyright © 2025 Devin B. Royal. All Rights Reserved.
+version: "3.8"
+services:
+  nmar-core:
+    build: ./java_nmar
+    image: nmar-core:local
+    container_name: nmar-core
+    command: ["java","-cp","target/nmar-core-0.2.0.jar","com.devin.nmar.App"]
+    depends_on:
+      - model-server
+  model-server:
+    build: ./python_model_server
+    image: nmar-model-server:local
+    container_name: nmar-model-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./python_model_server/models:/models:ro

@@ -1,0 +1,40 @@
+# Copyright © 2025 Devin B. Royal. All Rights Reserved.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nmar-model-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nmar-model-server
+  template:
+    metadata:
+      labels:
+        app: nmar-model-server
+    spec:
+      containers:
+      - name: model-server
+        image: nmar-model-server:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NMAR_MODEL_PATH
+          value: "/models/model.pt"
+        - name: NMAR_MODEL_TYPE
+          value: "torch"
+        volumeMounts:
+        - name: model-vol
+          mountPath: /models
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+      volumes:
+      - name: model-vol
+        hostPath:
+          path: /opt/nmar/models
+          type: DirectoryOrCreate

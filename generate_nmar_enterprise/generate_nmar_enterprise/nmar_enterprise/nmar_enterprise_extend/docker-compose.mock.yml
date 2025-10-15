@@ -1,0 +1,41 @@
+# Copyright © 2025 Devin B. Royal. All Rights Reserved.
+version: "3.8"
+services:
+  postgres:
+    image: ankane/pgvector:pg15
+    environment:
+      POSTGRES_USER: nmar_user
+      POSTGRES_PASSWORD: 3847d054e7d5dfcd2a9f73c5ee9bb707
+      POSTGRES_DB: nmar_db
+    ports:
+      - "54321:5432"
+    volumes:
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nmar_user -d nmar_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mock-grpc:
+    build: ./python_model_server
+    command: ["python","mock/mock_grpc_server.py"]
+    environment:
+      MODEL_SERVER_API_KEY: "0e9a78921eccae118ff8613f6a91e09c"
+      TRITON_MOCK_PORT: 8001
+    ports:
+      - "8001:8001"
+
+  model-server:
+    build: ./python_model_server
+    command: ["uvicorn", "src.server:app", "--host", "0.0.0.0", "--port", "8080"]
+    environment:
+      NMAR_MODEL_PATH: /models/model.pt
+      NMAR_MODEL_TYPE: torch
+      MODEL_SERVER_API_KEY: "0e9a78921eccae118ff8613f6a91e09c"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./python_model_server/models:/models:ro
+    depends_on:
+      - postgres

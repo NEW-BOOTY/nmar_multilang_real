@@ -1,0 +1,13 @@
+# Copyright © 2025 Devin B. Royal. All Rights Reserved.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nmar-core
+spec:
+  selector:
+    app: nmar-core
+  ports:
+  - protocol: TCP
+    port: 9000
+    targetPort: 9000
+  type: ClusterIP

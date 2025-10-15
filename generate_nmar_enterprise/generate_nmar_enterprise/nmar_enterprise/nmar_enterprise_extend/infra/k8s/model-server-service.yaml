@@ -1,0 +1,13 @@
+# Copyright © 2025 Devin B. Royal. All Rights Reserved.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nmar-model-server
+spec:
+  selector:
+    app: nmar-model-server
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP

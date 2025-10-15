@@ -1,0 +1,23 @@
+replicaCount: 2
+image:
+  repository: nmar-core
+  tag: latest
+modelServer:
+  image: nmar-model-server
+  tag: latest
+postgres:
+  image: ankane/pgvector
+  tag: pg15
+  persistence:
+    enabled: true
+    size: 5Gi
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "2"
+    memory: "4Gi"
+nodeSelector: {}
+tolerations: []
+affinity: {}
